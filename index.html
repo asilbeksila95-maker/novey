@@ -2720,6 +2720,7 @@ function collectOrder(t, id, payment){
   const addrParts = [orderLocation.text, flat && ('uy/xonadon: ' + flat), landmark && ("mo'ljal: " + landmark)].filter(Boolean);
   // items: har biri "Model (Rang) x2" ko'rinishida, masalan "NOVEY 101 (Teal Green) x2"
   const itemLabel = it => `${it.product.model} (${it.product.colors[it.color].name})` + (it.qty > 1 ? ` x${it.qty}` : '');
+  const tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) || null;
   return {
     order_id: String(id).slice(-5),
     name: $('f-name').value.trim(), phone: $('f-phone').value.trim(),
@@ -2734,7 +2735,8 @@ function collectOrder(t, id, payment){
     items_detail: cart.map(it => ({
       model: it.product.model, color: it.product.colors[it.color].name,
       qty: it.qty, price: priceOf(it.product, it.color)
-    }))
+    })),
+    customer_chat_id: tgUser ? tgUser.id : null   // mijozga status haqida xabar yuborish uchun
   };
 }
 const makeEntry = (id, t, paid, cardLabel) => ({
